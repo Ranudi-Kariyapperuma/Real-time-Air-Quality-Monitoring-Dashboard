@@ -2,7 +2,66 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    body {
+        background: linear-gradient(to bottom, #1E1E50, #000033);
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .container {
+        padding: 50px 20px;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 1.2rem;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #6200EA;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        margin-top: 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #3700B3;
+        }
+
+    nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+    .hero {
+        padding: 100px 20px;
+    }
+</style>
+
+<nav>
+    <a href="#">ABOUT US</a>
+</nav>
+
+<div class="hero">
+    <h1>WELCOME</h1>
+    <p>WE ARE HERE FOR YOU</p>
+    <p>Stay informed about the air you breathe with live AQI data.</p>
+    <a class="btn btn-primary" href="#">VIEW ON MAP</a>
 </div>
