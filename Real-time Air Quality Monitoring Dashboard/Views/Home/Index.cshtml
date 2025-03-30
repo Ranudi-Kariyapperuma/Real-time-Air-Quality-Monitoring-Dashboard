@@ -7,41 +7,16 @@
         background: linear-gradient(to bottom, #1E1E50, #000033);
         color: white;
         font-family: Arial, sans-serif;
-        text-align: center;
+        margin: 0;
+        padding: 0;
     }
-
-    .container {
-        padding: 50px 20px;
-    }
-
-    h1 {
-        font-size: 3rem;
-        font-weight: bold;
-    }
-
-    p {
-        font-size: 1.2rem;
-        margin-top: 20px;
-    }
-
-    .btn-primary {
-        background-color: #6200EA;
-        border: none;
-        padding: 12px 24px;
-        font-size: 1rem;
-        text-transform: uppercase;
-        margin-top: 20px;
-    }
-
-        .btn-primary:hover {
-            background-color: #3700B3;
-        }
 
     nav {
         display: flex;
         justify-content: center;
         gap: 20px;
         padding: 20px;
+        background: rgba(0,0,0,0.2);
     }
 
         nav a {
@@ -52,16 +27,152 @@
 
     .hero {
         padding: 100px 20px;
+        text-align: center;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+    .btn-primary {
+        background-color: #6200EA;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        margin-top: 20px;
+        transition: background 0.3s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: #3700B3;
+        }
+
+    .section {
+        padding: 60px 20px;
+        text-align: center;
+        animation: fadeIn 2s ease-in-out;
+    }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+    .info-box {
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 10px;
+        max-width: 600px;
+    }
+
+    .map-container, .chart-container {
+        margin: 20px auto;
+        width: 80%;
+        height: 300px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+    }
+
+    footer {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: center;
+    }
+
+        footer a {
+            color: #BB86FC;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+    @@keyframes fadeIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
     }
 </style>
 
-<nav>
-    <a href="#">ABOUT US</a>
-</nav>
 
-<div class="hero">
-    <h1>WELCOME</h1>
-    <p>WE ARE HERE FOR YOU</p>
+<section class="hero">
+    <h1>Real-time Air Quality Monitoring</h1>
     <p>Stay informed about the air you breathe with live AQI data.</p>
-    <a class="btn btn-primary" href="#">VIEW ON MAP</a>
-</div>
+    <a class="btn btn-primary" href="map3.html">View Dashboard</a>
+</section>
+
+
+<section class="section">
+    <h2>Air Quality Summary</h2>
+    <div class="info-box">
+        <p>✅ <strong>Current AQI: 75</strong> (Moderate)</p>
+        <p>🔥 <strong>Most Polluted Area Today:</strong> Colombo 07 - AQI: 150</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>How It Works</h2>
+    <div class="info-box">
+        <p>1️⃣ Sensors collect air quality data 🏭</p>
+        <p>2️⃣ Data is processed &amp; analyzed 🔍</p>
+        <p>3️⃣ Displayed in real-time on this dashboard 📊</p>
+    </div>
+</section>
+
+<section class="section">
+    <h2>Health Recommendations</h2>
+    <div class="info-box">
+        <p><strong>AQI 0-50:</strong> Air quality is good. Enjoy outdoor activities! 🌿</p>
+        <p><strong>AQI 151-200:</strong> Unhealthy! Reduce outdoor activities 🚫</p>
+        <p><strong>AQI 300+:</strong> Hazardous! Stay indoors and wear a mask 😷</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Interactive Map Preview</h2>
+    <div class="map-container">
+        <p>🗺️ Mini-map (Google Maps / Leaflet.js placeholder)</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Historical Trends</h2>
+    <div class="chart-container">
+        <p>📈 Line graph showing AQI trends over the last week (Chart.js / D3.js placeholder)</p>
+    </div>
+</section>
+
+
+<section class="section">
+    <h2>Public Alerts &amp; News</h2>
+    <div class="info-box">
+        <p>🚨 Colombo AQI expected to rise this weekend due to industrial emissions.</p>
+    </div>
+</section>
+
