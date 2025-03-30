@@ -1,0 +1,157 @@
+﻿
+<style>
+    body {
+        background: linear-gradient(to bottom, #1E1E50, #000033);
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        background: rgba(0,0,0,0.2);
+    }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+
+    .hero {
+        padding: 100px 20px;
+        text-align: center;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+    .team-section {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+        .team-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+    .team-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .member-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        width: 250px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .member-card:hover {
+            transform: scale(1.05);
+        }
+
+        .member-card img {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .member-card h3 {
+            margin-top: 15px;
+            font-size: 1.5rem;
+        }
+
+        .member-card p {
+            font-size: 1rem;
+            color: #BB86FC;
+        }
+
+    footer {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: center;
+    }
+
+        footer a {
+            color: #BB86FC;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+    @@keyframes fadeIn {
+        0%
+
+    {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>
+
+<section class="hero">
+    <h1>Meet Our Team</h1>
+    <p>Passionate individuals working together for clean air solutions.</p>
+</section>
+
+<section class="team-section">
+    <h2>Our Team Members</h2>
+    <div class="team-container">
+        <div class="member-card">
+            <img src="~/lib/images/sanuda.jpg" alt="Member 1">
+            <h3>Sanuda De silva</h3>
+            <p>Computer Science - Batch 23.1</p>
+        </div>
+        <div class="member-card">
+            <img src="~/lib/images/mandinu.png" alt="Member 2">
+            <h3>Mandinu Balsooriya</h3>
+            <p>Computer Science - Batch 23.1</p>
+        </div>
+        <div class="member-card">
+            <img src="~/lib/images/devinda.jpg" alt="Member 3">
+            <h3>Devinda thilina</h3>
+            <p>Computer Science - Batch 23.1</p>
+        </div>
+        <div class="member-card">
+            <img src="~/lib/images/ranudi.jpg" alt="Member 4">
+            <h3>Ranudi Kariyapperuma</h3>
+            <p>Technology Management - Batch 23.1</p>
+        </div>
+        <div class="member-card">
+            <img src="~/lib/images/naduni.png" alt="Member 5">
+            <h3>Naduni Kodikara</h3>
+            <p>Technology Management - Batch 23.1</p>
+        </div>
+        <div class="member-card">
+            <img src="~/lib/images/denethmi.jpg" alt="Member 4">
+            <h3>Denethmi Aththanayaka</h3>
+            <p>Computer Science - Batch 23.1</p>
+        </div>
+    </div>
+</section>

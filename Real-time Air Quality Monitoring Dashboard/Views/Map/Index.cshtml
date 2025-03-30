@@ -1,0 +1,295 @@
+﻿<title>Colombo Air Quality Monitoring Dashboard</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(to bottom, #1E1E50, #000033); /* Blue Gradient */
+        color: white;
+    }
+
+    nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        background: rgba(0,0,0,0.2);
+    }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .dashboard-header {
+        text-align: center;
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .map-container {
+        height: 600px;
+        margin-top: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        background-color: #1e2a47; /* Dark blue background for the map container */
+    }
+
+    #colombo-map {
+        height: 100%;
+        width: 100%;
+    }
+
+    .legend {
+        background-color: #1e2a47; /* Dark blue background for the legend */
+        color: white;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .legend-items {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .color-box {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    .sensor-data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: #1e2a47; /* Dark blue background for the table */
+    }
+
+        .sensor-data-table th,
+        .sensor-data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .sensor-data-table th {
+            background-color: #2c3e50; /* Darker blue for table headers */
+        }
+
+    .aqi-good {
+        background-color: green;
+        color: white;
+    }
+
+    .aqi-moderate {
+        background-color: yellow;
+        color: black;
+    }
+
+    .aqi-unhealthy {
+        background-color: orange;
+        color: white;
+    }
+
+    .aqi-very-unhealthy {
+        background-color: red;
+        color: white;
+    }
+
+    footer {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: center;
+    }
+
+        footer a {
+            color: #BB86FC;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+    @@keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1>Colombo Air Quality Monitoring Dashboard</h1>
+    </header>
+
+
+    <div class="map-container">
+        <div id="colombo-map"></div>
+    </div>
+
+    <div class="legend">
+        <h3>AQI Color Scale</h3>
+        <div class="legend-items">
+            <div class="legend-item">
+                <span class="color-box" style="background-color: green;"></span> Good (0-50)
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background-color: yellow;"></span> Moderate (51-100)
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background-color: orange;"></span> Unhealthy (101-150)
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background-color: red;"></span> Very Unhealthy (151-200)
+            </div>
+        </div>
+    </div>
+
+    <div class="sensor-data">
+        <h3>Sensor Data Overview</h3>
+        <table class="sensor-data-table">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>AQI</th>
+                    <th>Status</th>
+                    <th>Pollutants</th>
+                </tr>
+            </thead>
+            <tbody id="sensor-data-body">
+                <!-- Data will be dynamically populated -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    // Simulated Sensor Data
+    const sensorData = [
+        {
+            id: 1,
+            name: 'Colombo City Center',
+            latitude: 6.9271,
+            longitude: 79.8612,
+            aqi: 75,
+            pollutants: {
+                pm25: 35.5,
+                pm10: 45.2,
+                no2: 25.1,
+                co: 15.3
+            }
+        },
+        {
+            id: 2,
+            name: 'Colombo Port',
+            latitude: 6.9630,
+            longitude: 79.8480,
+            aqi: 120,
+            pollutants: {
+                pm25: 65.5,
+                pm10: 85.2,
+                no2: 45.1,
+                co: 35.3
+            }
+        },
+        {
+            id: 3,
+            name: 'Nugegoda',
+            latitude: 6.8524,
+            longitude: 79.8976,
+            aqi: 45,
+            pollutants: {
+                pm25: 22.5,
+                pm10: 30.2,
+                no2: 15.1,
+                co: 10.3
+            }
+        }
+    ];
+
+    // Initialize map
+    var map = L.map('colombo-map').setView([6.9271, 79.8612], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Function to get AQI color
+    function getAQIColor(aqi) {
+        if (aqi <= 50) return 'green';
+        if (aqi <= 100) return 'yellow';
+        if (aqi <= 150) return 'orange';
+        return 'red';
+    }
+
+    // Function to get AQI category
+    function getAQICategory(aqi) {
+        if (aqi <= 50) return 'Good';
+        if (aqi <= 100) return 'Moderate';
+        if (aqi <= 150) return 'Unhealthy';
+        return 'Very Unhealthy';
+    }
+
+    // Add markers for each sensor
+    sensorData.forEach(function(sensor) {
+        var aqi = sensor.aqi;
+        var color = getAQIColor(aqi);
+
+        var marker = L.circleMarker([sensor.latitude, sensor.longitude], {
+            radius: 8,
+            fillColor: color,
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        }).addTo(map);
+
+        marker.bindPopup(`
+            <b>Location:</b> ${sensor.name}<br>
+            <b>AQI:</b> ${aqi} (${getAQICategory(aqi)})<br>
+            <b>PM2.5:</b> ${sensor.pollutants.pm25} µg/m³<br>
+            <b>PM10:</b> ${sensor.pollutants.pm10} µg/m³
+        `);
+    });
+
+    // Populate sensor data table
+    const sensorDataBody = document.getElementById('sensor-data-body');
+    sensorData.forEach(sensor => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${sensor.name}</td>
+            <td class="aqi-${getAQICategory(sensor.aqi).toLowerCase().replace(' ', '-')}">${sensor.aqi} (${getAQICategory(sensor.aqi)})</td>
+            <td>${getAQICategory(sensor.aqi)}</td>
+            <td>
+                PM2.5: ${sensor.pollutants.pm25} µg/m³<br>
+                PM10: ${sensor.pollutants.pm10} µg/m³<br>
+                NO2: ${sensor.pollutants.no2} µg/m³<br>
+                CO: ${sensor.pollutants.co} µg/m³
+            </td>
+        `;
+        sensorDataBody.appendChild(row);
+    });
+</script>
