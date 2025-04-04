@@ -22,8 +22,4 @@ public class AirQualityController : Controller
         return Json(aqiData);
     }
 
-    public IActionResult Index()
-    {
-        return View();
-    }
 }
