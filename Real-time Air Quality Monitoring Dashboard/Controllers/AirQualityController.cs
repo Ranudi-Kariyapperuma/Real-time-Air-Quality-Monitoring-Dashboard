@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class AirQualityController : Controller
 {
+    public IActionResult Chart()
+    {
+        return View();
+    }
     public IActionResult GetAqiData()
     {
         var aqiData = new

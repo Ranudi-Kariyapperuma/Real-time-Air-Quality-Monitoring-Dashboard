@@ -1,40 +1,174 @@
 ﻿@{
-    ViewData["Title"] = "Historical rends";
+    ViewData["Title"] = "Historical Trends";
 }
+
+<style>
+    body {
+        background: linear-gradient(to bottom, #1E1E50, #000033);
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        background: rgba(0,0,0,0.2);
+    }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+    .hero {
+        padding: 100px 20px;
+        text-align: center;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+    .btn-primary {
+        background-color: #6200EA;
+        border: none;
+        padding: 12px 24px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        margin-top: 20px;
+        transition: background 0.3s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: #3700B3;
+        }
+
+    .section {
+        padding: 60px 20px;
+        text-align: center;
+        animation: fadeIn 2s ease-in-out;
+    }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
+
+    .info-box {
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 10px;
+        max-width: 600px;
+    }
+
+    .map-container, .chart-container {
+        margin: 20px auto;
+        width: 80%;
+        height: 300px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+    }
+
+
+    footer {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        text-align: center;
+    }
+
+        footer a {
+            color: #BB86FC;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+    .rounded-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+
+    @@keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 
 <h2>AQI Trends Over the Last Week</h2>
 <canvas id="aqiChart"></canvas>
 
+@{
+    ViewData["Title"] = "Air Quality Chart";
+}
+
+<h2>Air Quality Index (AQI) - Last 7 Days</h2>
+
+<canvas id="aqiChart" width="800" height="400"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        fetch("/AirQuality/GetAqiTrends")
-            .then(response => response.json())
+        fetch('/AirQuality/GetAqiData')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
             .then(data => {
-                var ctx = document.getElementById("aqiChart").getContext("2d");
+                const ctx = document.getElementById('aqiChart').getContext('2d');
                 new Chart(ctx, {
-                    type: "line",
+                    type: 'line',
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: "AQI Levels Over the Past Week",
+                            label: 'AQI',
                             data: data.values,
-                            borderColor: "rgba(75, 192, 192, 1)",
-                            backgroundColor: "rgba(75, 192, 192, 0.2)",
-                            borderWidth: 2,
-                            pointRadius: 5
+                            fill: false,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            tension: 0.1
                         }]
                     },
                     options: {
-                        responsive: true,
                         scales: {
                             y: {
-                                beginAtZero: false,
-                                suggestedMax: 200
+                                beginAtZero: true
                             }
                         }
                     }
                 });
             })
-            .catch(error => console.error("Error fetching AQI data:", error));
+            .catch(error => {
+                console.error("Fetch error:", error);
+            });
     });
 </script>
