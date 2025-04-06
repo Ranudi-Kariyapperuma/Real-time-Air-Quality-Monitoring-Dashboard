@@ -123,17 +123,19 @@
     }
 </style>
 
-<h2><center>Air Quality Index (AQI) - Last 7 Days</center></h2>
-
+<section class="hero">
+<h1><center>Air Quality Index (AQI) - Last 7 Days</center></h1>
+<br>
 <div>
 <canvas id="aqiChart"></canvas>
 </div>
 
+    </section>
 
 @{
     ViewData["Title"] = "Air Quality Chart";
 }
-
+<br>
 <canvas id="aqiChart" width="800" height="400"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
