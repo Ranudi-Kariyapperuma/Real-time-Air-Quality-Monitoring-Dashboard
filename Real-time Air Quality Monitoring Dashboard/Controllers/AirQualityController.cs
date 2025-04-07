@@ -1,29 +1,48 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using Real_time_Air_Quality_Monitoring_Dashboard.Models;
 
-public class AirQualityController : Controller
+namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
 {
-    public IActionResult Chart()
-    {
-        return View();
-    }
-    public IActionResult GetAqiData()
-    {
-        var aqiData = new
-        {
-            labels = new List<string>(),
-            values = new List<int>()
-        };
 
-        Random rand = new Random();
-        for (int i = 6; i >= 0; i--)
+
+    public class AirQualityController : Controller
+    {
+        private readonly AirQualityDbContext _context;
+
+        public AirQualityController(AirQualityDbContext context)
         {
-            aqiData.labels.Add(DateTime.Now.AddDays(-i).ToString("yyyy-MM-dd"));
-            aqiData.values.Add(rand.Next(50, 200)); // Simulating AQI values
+            _context = context;
         }
 
-        return Json(aqiData);
-    }
+        [HttpGet]
+        public IActionResult GetHistoricalAqiData(string sensorId, string period)
+        {
+            var now = DateTime.Now;
+            DateTime fromDate;
 
+            switch (period.ToLower())
+            {
+                case "day": fromDate = now.AddDays(-1); break;
+                case "week": fromDate = now.AddDays(-7); break;
+                case "month": fromDate = now.AddMonths(-1); break;
+                default: fromDate = now.AddDays(-7); break;
+            }
+
+
+            var data = _context.AQIRecords
+                        .Where(r => r.SensorId == sensorId && r.Timestamp >= fromDate)
+                        .OrderBy(r => r.Timestamp)
+                        .ToList();
+
+            var labels = data.Select(d => d.Timestamp.ToString("yyyy-MM-dd")).ToList();
+            var values = data.Select(d => d.AQIValue).ToList();
+
+            return Json(new { labels, values });
+
+
+        }
+    }
 }

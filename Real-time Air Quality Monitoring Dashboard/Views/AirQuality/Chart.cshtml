@@ -124,15 +124,29 @@
 </style>
 
 <section class="hero">
-<h1><center>Air Quality Index (AQI) - Last 7 Days</center></h1>
-    <p class="text-gray-300 max-w-2xl mx-auto">
-        The graph below shows simulated Air Quality Index (AQI) levels over the past 7 days.
-        Monitoring AQI trends helps track pollution levels and plan outdoor activities accordingly.
-    </p>
-<br>
-<div>
-<canvas id="aqiChart"></canvas>
-</div>
+    <div class="text-center mt-4">
+        <h2 class="text-white text-2xl font-bold mb-2">Colombo Historical AQI Trends</h2>
+        <p class="text-gray-300">Select a sensor and time period to view AQI history.</p>
+    </div>
+
+    <!-- Sensor and Time Filters -->
+    <div class="flex justify-center gap-4 mt-4">
+        <select id="sensorSelector" class="p-2 rounded">
+            <option value="Sensor01">Sensor01</option>
+            <option value="Sensor02">Sensor02</option>
+        </select>
+
+        <select id="timeSelector" class="p-2 rounded">
+            <option value="day">Last Day</option>
+            <option value="week" selected>Last Week</option>
+            <option value="month">Last Month</option>
+        </select>
+    </div>
+
+    <!-- Chart Canvas -->
+    <div class="max-w-4xl mx-auto mt-6 p-4 bg-gray-800 rounded-lg">
+        <canvas id="aqiHistoryChart"></canvas>
+    </div>
 
     </section>
 
@@ -140,45 +154,70 @@
     ViewData["Title"] = "Air Quality Chart";
 }
 <br>
-<canvas id="aqiChart" width="800" height="400"></canvas>
+
+<!--
+<canvas id="aqiChart" width="800" height="400"></canvas> 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+-->
 
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('aqiHistoryChart').getContext('2d');
+        let aqiChart;
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetch('/AirQuality/GetAqiData')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then(data => {
-                const ctx = document.getElementById('aqiChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'AQI',
-                            data: data.values,
-                            fill: false,
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+        function loadChart(sensorId, period) {
+            fetch(`/AirQuality/GetHistoricalAqiData?sensorId=${sensorId}&period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (aqiChart) aqiChart.destroy();
+
+                    aqiChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'AQI',
+                                data: data.values,
+                                borderColor: '#00c0ff',
+                                backgroundColor: 'rgba(0,192,255,0.2)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { color: '#fff' },
+                                    grid: { color: '#444' }
+                                },
+                                x: {
+                                    ticks: { color: '#fff' }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#fff' }
+                                }
                             }
                         }
-                    }
+                    });
                 });
-            })
-            .catch(error => {
-                console.error("Fetch error:", error);
-            });
-    });
-</script>
+        }
+
+        // Dropdown event listeners
+        document.getElementById('sensorSelector').addEventListener('change', () => {
+            loadChart(sensorSelector.value, timeSelector.value);
+        });
+
+        document.getElementById('timeSelector').addEventListener('change', () => {
+            loadChart(sensorSelector.value, timeSelector.value);
+        });
+
+        // Load chart initially
+        loadChart('Sensor01', 'week');
+    </script>
+}
