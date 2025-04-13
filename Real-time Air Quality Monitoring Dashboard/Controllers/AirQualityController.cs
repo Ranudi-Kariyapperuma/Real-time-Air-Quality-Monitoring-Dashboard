@@ -7,7 +7,8 @@ using Real_time_Air_Quality_Monitoring_Dashboard.Models;
 namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
 {
 
-
+    [ApiController]
+    [Route("AirQuality")]
     public class AirQualityController : Controller
     {
         private readonly AirQualityDbContext _context;
@@ -17,9 +18,13 @@ namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
             _context = context;
         }
 
-        [HttpGet]
-        public IActionResult GetHistoricalAqiData(string sensorId, string period)
+        [HttpGet("GetAQIData")]
+        public IActionResult GetAQIData([FromQuery]string sensorId, [FromQuery] string period)
         {
+
+            if (string.IsNullOrWhiteSpace(sensorId) || string.IsNullOrWhiteSpace(period))
+                return BadRequest(new { message = "sensorId and period are required." });
+
             var now = DateTime.Now;
             DateTime fromDate;
 

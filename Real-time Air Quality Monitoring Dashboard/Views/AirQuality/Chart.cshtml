@@ -2,127 +2,6 @@
     ViewData["Title"] = "Historical Trends";
 }
 
-<style>
-    body {
-        background: linear-gradient(to bottom, #1E1E50, #000033);
-        color: white;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-
-    nav {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        padding: 20px;
-        background: rgba(0,0,0,0.2);
-    }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-        }
-
-    .hero {
-        padding: 100px 20px;
-        text-align: center;
-        animation: fadeIn 1.5s ease-in-out;
-    }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: bold;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-top: 20px;
-        }
-
-    .btn-primary {
-        background-color: #6200EA;
-        border: none;
-        padding: 12px 24px;
-        font-size: 1rem;
-        text-transform: uppercase;
-        margin-top: 20px;
-        transition: background 0.3s ease-in-out;
-    }
-
-        .btn-primary:hover {
-            background-color: #3700B3;
-        }
-
-    .section {
-        padding: 60px 20px;
-        text-align: center;
-        animation: fadeIn 2s ease-in-out;
-    }
-
-        .section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .section p {
-            font-size: 1.1rem;
-            margin: 10px 0;
-        }
-
-    .info-box {
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid rgba(255,255,255,0.3);
-        border-radius: 10px;
-        max-width: 600px;
-    }
-
-    .map-container, .chart-container {
-        margin: 20px auto;
-        width: 80%;
-        height: 300px;
-        background: #333;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-    }
-
-
-    footer {
-        background: rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        text-align: center;
-    }
-
-        footer a {
-            color: #BB86FC;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-    .rounded-img {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-    }
-
-
-    @@keyframes fadeIn {
-        0% {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
-
 <section class="hero">
     <div class="text-center mt-4">
         <h2 class="text-white text-2xl font-bold mb-2">Colombo Historical AQI Trends</h2>
@@ -132,8 +11,7 @@
     <!-- Sensor and Time Filters -->
     <div class="flex justify-center gap-4 mt-4">
         <select id="sensorSelector" class="p-2 rounded">
-            <option value="Sensor01">Sensor01</option>
-            <option value="Sensor02">Sensor02</option>
+            <option value="colombo">Colombo</option>
         </select>
 
         <select id="timeSelector" class="p-2 rounded">
@@ -147,31 +25,19 @@
     <div class="max-w-4xl mx-auto mt-6 p-4 bg-gray-800 rounded-lg">
         <canvas id="aqiHistoryChart"></canvas>
     </div>
+</section>
 
-    </section>
-
-@{
-    ViewData["Title"] = "Air Quality Chart";
-}
 <br>
-
-<!--
-<canvas id="aqiChart" width="800" height="400"></canvas> 
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
--->
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-
         document.addEventListener("DOMContentLoaded", function () {
-
             const ctx = document.getElementById('aqiHistoryChart').getContext('2d');
             let aqiChart;
 
             function loadChart(sensorId, period) {
-                fetch(`/AirQuality/GetHistoricalAqiData?sensorId=${sensorId}&period=${period}`)
+                fetch(`/AirQuality/GetAQIData?sensorId=${sensorId}&period=${period}`)
                     .then(response => response.json())
                     .then(data => {
                         if (aqiChart) aqiChart.destroy();
@@ -210,18 +76,21 @@
                         });
                     });
             }
-        }
 
-        // Dropdown event listeners
-        document.getElementById('sensorSelector').addEventListener('change', () => {
+            const sensorSelector = document.getElementById('sensorSelector');
+            const timeSelector = document.getElementById('timeSelector');
+
+            sensorSelector.addEventListener('change', () => {
+                loadChart(sensorSelector.value, timeSelector.value);
+            });
+
+            timeSelector.addEventListener('change', () => {
+                loadChart(sensorSelector.value, timeSelector.value);
+            });
+
+            // Initial load with matching value
             loadChart(sensorSelector.value, timeSelector.value);
         });
-
-        document.getElementById('timeSelector').addEventListener('change', () => {
-            loadChart(sensorSelector.value, timeSelector.value);
-        });
-
-        // Load chart initially
-        loadChart('Sensor01', 'week');
     </script>
 }
+

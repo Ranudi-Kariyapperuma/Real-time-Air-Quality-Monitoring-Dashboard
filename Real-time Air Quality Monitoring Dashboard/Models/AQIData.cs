@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string SensorId { get; set; }
+        public string Period { get; set; }
         public DateTime Timestamp { get; set; }
         public int AQIValue { get; set; }
 
