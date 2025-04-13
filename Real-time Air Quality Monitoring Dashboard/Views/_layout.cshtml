@@ -1,3 +1,8 @@
-﻿<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+﻿@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+}
 <h1>View</h1>
-<body></body>
+<body>
+	@RenderSection("Scripts", required: false)
+
+</body>

@@ -164,48 +164,52 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('aqiHistoryChart').getContext('2d');
-        let aqiChart;
 
-        function loadChart(sensorId, period) {
-            fetch(`/AirQuality/GetHistoricalAqiData?sensorId=${sensorId}&period=${period}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (aqiChart) aqiChart.destroy();
+        document.addEventListener("DOMContentLoaded", function () {
 
-                    aqiChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: data.labels,
-                            datasets: [{
-                                label: 'AQI',
-                                data: data.values,
-                                borderColor: '#00c0ff',
-                                backgroundColor: 'rgba(0,192,255,0.2)',
-                                fill: true,
-                                tension: 0.3
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: { color: '#fff' },
-                                    grid: { color: '#444' }
-                                },
-                                x: {
-                                    ticks: { color: '#fff' }
-                                }
+            const ctx = document.getElementById('aqiHistoryChart').getContext('2d');
+            let aqiChart;
+
+            function loadChart(sensorId, period) {
+                fetch(`/AirQuality/GetHistoricalAqiData?sensorId=${sensorId}&period=${period}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (aqiChart) aqiChart.destroy();
+
+                        aqiChart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: data.labels,
+                                datasets: [{
+                                    label: 'AQI',
+                                    data: data.values,
+                                    borderColor: '#00c0ff',
+                                    backgroundColor: 'rgba(0,192,255,0.2)',
+                                    fill: true,
+                                    tension: 0.3
+                                }]
                             },
-                            plugins: {
-                                legend: {
-                                    labels: { color: '#fff' }
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                        ticks: { color: '#fff' },
+                                        grid: { color: '#444' }
+                                    },
+                                    x: {
+                                        ticks: { color: '#fff' }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        labels: { color: '#fff' }
+                                    }
                                 }
                             }
-                        }
+                        });
                     });
-                });
+            }
         }
 
         // Dropdown event listeners
