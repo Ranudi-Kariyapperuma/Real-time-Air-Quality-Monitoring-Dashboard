@@ -19,11 +19,13 @@ namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
         }
 
         [HttpGet("GetAQIData")]
-        public IActionResult GetAQIData([FromQuery]string sensorId, [FromQuery] string period)
+        public IActionResult GetAQIData([FromQuery]string sensorId ="colombo", [FromQuery] string period="week")
         {
 
             if (string.IsNullOrWhiteSpace(sensorId) || string.IsNullOrWhiteSpace(period))
                 return BadRequest(new { message = "sensorId and period are required." });
+
+            Console.WriteLine($"Sensor: {sensorId}, Period: {period}");
 
             var now = DateTime.Now;
             DateTime fromDate;
@@ -37,10 +39,10 @@ namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
             }
 
 
-            var data = _context.AQIRecords
-                        .Where(r => r.SensorId == sensorId && r.Timestamp >= fromDate)
+            var data = _context.AQIRecords;
+                       /* .Where(r => r.SensorId == sensorId && r.Timestamp >= fromDate)
                         .OrderBy(r => r.Timestamp)
-                        .ToList();
+                        .ToList(); */
 
             var labels = data.Select(d => d.Timestamp.ToString("yyyy-MM-dd")).ToList();
             var values = data.Select(d => d.AQIValue).ToList();

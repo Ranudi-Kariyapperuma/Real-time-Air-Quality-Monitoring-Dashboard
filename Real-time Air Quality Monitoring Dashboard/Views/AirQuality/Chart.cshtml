@@ -37,6 +37,10 @@
             let aqiChart;
 
             function loadChart(sensorId, period) {
+
+                console.log("Sending sensorId:", sensorId);
+                console.log("Sending period:", period);
+
                 fetch(`/AirQuality/GetAQIData?sensorId=${sensorId}&period=${period}`)
                     .then(response => response.json())
                     .then(data => {

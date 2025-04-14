@@ -11,7 +11,14 @@ namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
             }
 
             public DbSet<AQIData> AQIRecords { get; set; }
-        }
+
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                // Explicitly map AQIData to the correct MySQL table
+                modelBuilder.Entity<AQIData>().ToTable("aqi_records");
+            }
+
+    }
 }
 
 

@@ -1,5 +1,8 @@
-﻿namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Real_time_Air_Quality_Monitoring_Dashboard.Data
 {
+    [Table("aqi_records")]
     public class AQIData
     {
         public int Id { get; set; }
